@@ -1,1 +1,3 @@
 I kept running into words I didn't know while listening to research and audio breakdowns of my own bug bounty notes, and just writing down definitions wasn't making them stick. So I built a small vocab trainer instead of installing an existing app — flashcards styled like a bug report triage queue, where each word moves through New, Needs Retest, and Resolved the same way an actual finding moves through a program's workflow. It's a single local site, no backend, progress saved in the browser, and the word list lives in its own file so I can just keep appending to it as new words show up.
+
+## built with AI assistance, word list is my own
