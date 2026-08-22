@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vuln Queue — Vocab Trainer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">//</span>
+      <div class="brand-text">
+        <h1>VULN QUEUE</h1>
+        <p>personal vocabulary triage board</p>
+      </div>
+    </div>
+    <div class="stats" id="stats">
+      <div class="stat">
+        <span class="stat-value" id="stat-new">0</span>
+        <span class="stat-label">new</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="stat-retest">0</span>
+        <span class="stat-label">retest</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="stat-resolved">0</span>
+        <span class="stat-label">resolved</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="modeSwitch" role="tablist">
+    <button class="modeBtn active" id="tab-flash" role="tab" aria-selected="true">Flashcards</button>
+    <button class="modeBtn" id="tab-quiz" role="tab" aria-selected="false">Quiz</button>
+  </nav>
+
+  <main>
+    <!-- FLASHCARD MODE -->
+    <section id="flashMode" class="mode">
+      <div class="progressTrack" aria-hidden="true">
+        <div class="progressFill" id="progressFill"></div>
+      </div>
+
+      <div class="cardStage">
+        <div class="card" id="card" tabindex="0">
+          <div class="cardInner" id="cardInner">
+
+            <div class="cardFace cardFront">
+              <span class="findingId" id="frontId">VULN-000</span>
+              <span class="statusBadge" id="frontStatus">new</span>
+              <h2 class="term" id="frontTerm">word</h2>
+              <p class="hint">tap card to view report</p>
+            </div>
+
+            <div class="cardFace cardBack">
+              <span class="findingId" id="backId">VULN-000</span>
+              <div class="reportBody">
+                <p class="fieldLabel">Description</p>
+                <p class="definition" id="backDefinition">definition</p>
+                <p class="fieldLabel">Impact example</p>
+                <p class="example" id="backExample">example</p>
+              </div>
+              <div class="actions">
+                <button class="btn btnRetest" id="btnRetest">Needs Retest</button>
+                <button class="btn btnResolve" id="btnResolve">Resolved</button>
+              </div>
+            </div>
+
+          </div>
+          <div class="stamp" id="stamp">RESOLVED</div>
+        </div>
+      </div>
+
+      <div class="footerRow">
+        <span class="streak" id="streak">streak: 0</span>
+        <button class="linkBtn" id="resetBtn">reset progress</button>
+      </div>
+    </section>
+
+    <!-- QUIZ MODE -->
+    <section id="quizMode" class="mode hidden">
+      <div class="quizCard">
+        <span class="findingId" id="quizId">VULN-000</span>
+        <h2 class="term" id="quizTerm">word</h2>
+        <p class="quizPrompt">Select the correct description</p>
+        <div class="quizOptions" id="quizOptions"></div>
+        <p class="quizFeedback" id="quizFeedback"></p>
+      </div>
+      <div class="footerRow">
+        <span class="streak" id="quizStreak">streak: 0</span>
+        <button class="linkBtn" id="resetBtnQuiz">reset progress</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="words.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
