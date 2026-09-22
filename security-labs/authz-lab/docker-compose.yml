@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: authz_lab
+      POSTGRES_PASSWORD: authz_lab_dev_only
+      POSTGRES_DB: authz_lab
+    ports:
+      # Bound to localhost only — do not change to 0.0.0.0 or "5432:5432"
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - authz_lab_pgdata:/var/lib/postgresql/data
+
+volumes:
+  authz_lab_pgdata:
