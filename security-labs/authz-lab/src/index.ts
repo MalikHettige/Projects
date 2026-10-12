@@ -3,6 +3,9 @@ import { pool } from "./db/pool.js";
 import { resolveActor } from "./policy/auth.js";
 import { authorize } from "./policy/authorize.js";
 import type { Actor } from "./policy/authorize.js";
+import { internalRouter } from "./routes/internal.js";
+import { workflowRouter } from "./routes/workflow.js";
+import { buildGraphQLMiddleware } from "./graphql/schema.js";
 
 export const app = express();
 app.use(express.json());
@@ -56,7 +59,18 @@ app.get("/api/v1/orgs/:orgId/documents/:id", async (req, res) => {
   return res.status(200).json(doc);
 });
 
+app.use(internalRouter);
+app.use(workflowRouter);
+
 const port = Number(process.env.PORT ?? 3000);
-if (process.env.NODE_ENV !== "test") {
-  app.listen(port, () => console.log(`authz-lab listening on :${port}`));
+
+async function start() {
+  const graphqlMiddleware = await buildGraphQLMiddleware();
+  app.use("/graphql", graphqlMiddleware);
+
+  if (process.env.NODE_ENV !== "test") {
+    app.listen(port, () => console.log(`authz-lab listening on :${port}`));
+  }
 }
+
+start();

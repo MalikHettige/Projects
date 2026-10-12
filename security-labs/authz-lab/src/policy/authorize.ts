@@ -164,6 +164,7 @@ const REQUIRED_ROLE: Record<string, Role> = {
   "export.create": "manager",
   "export.download": "manager",
   "webhook.create": "admin",
+  "auditLog.readList": "admin",
 };
 
 // Policies where ownership (resource.ownerId === actor.userId) matters,
