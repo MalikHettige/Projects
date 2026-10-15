@@ -24,7 +24,7 @@ A custom intentionally vulnerable application built for:
 
 ## Security Tools
 
-Personal security utilities and automation projects.
+Personal security utilities and automation projects. [Pertaining to hunting](https://github.com/MalikHettige/Scripts-tools)
 
 Examples:
 
