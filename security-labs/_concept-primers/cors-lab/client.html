@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Local CORS exercise</title>
+  </head>
+  <body>
+    <h1>Local CORS exercise</h1>
+    <p>This page at <code id="origin"></code> attempts a credentialed fetch to the local API.</p>
+    <button id="fetch">Fetch synthetic secret</button>
+    <pre id="result">Click the button to run the browser fetch.</pre>
+    <script>
+      const api = "http://127.0.0.1:4301/secret";
+      document.querySelector("#origin").textContent = location.origin;
+      document.querySelector("#fetch").addEventListener("click", async () => {
+        const result = document.querySelector("#result");
+        result.textContent = "Requesting…";
+        try {
+          const response = await fetch(api, { credentials: "include" });
+          result.textContent = `HTTP ${response.status}\n${await response.text()}`;
+        } catch (error) {
+          result.textContent = `Browser blocked JavaScript from reading the cross-origin response: ${error.message}`;
+        }
+      });
+    </script>
+  </body>
+</html>
