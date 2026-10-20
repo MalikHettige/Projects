@@ -88,47 +88,26 @@ authz-lab/
 - Never test techniques from this lab against systems you do not own or have explicit permission to test.
 - Every finding gets a write-up: the missing decision, the impact, and the fix.
 
-## What am I hunting here exactly?
-My aim is to become fluent in hunting critical chains and bugs. Need to do these enough times for me to feel like muscle memory. I start hunting right after I turned 18 on January 13 2027.
+## Practice plan
 
-**Single-exploit criticals**
-- [ ]  IDOR on password reset/account recovery → zero-auth ATO
-- [ ]  IDOR on admin/internal endpoints leaked via JS bundle
-- [ ]  Mass IDOR via GraphQL `node(id:)`/batch endpoints
-- [ ]  IDOR on financial objects (invoices, payouts, bank accounts)
-- [ ]  IDOR + PII export via predictable storage path
-- [ ]  Response-manipulation MFA bypass → zero-interaction ATO
-- [ ]  JWT alg confusion (RS256→HS256) → forge any identity
-- [ ]  JWT `kid` header injection (path traversal/SQLi) → mass signature forgery
+Build repeatable practice around these selected PortSwigger Web Security Academy learning paths:
 
-**Chains**
+- Broken Access Control (BAC)
+- Authentication
+- Information Disclosure
+- JSON Web Tokens (JWT)
+- API Testing
+- Cross-origin Resource Sharing (CORS)
 
-- [ ]  OAuth redirect_uri/Referer leak + IDOR on account-linking → pre-auth mass ATO
-- [ ]  OAuth state replay + callback IDOR → full ATO
-- [ ]  IDOR on OAuth consent management (view/revoke others’ connected apps)
-- [ ]  JWT forgery + secondary IDOR check bypass → auth bypass + BOLA combined
-- [ ]  Refresh token IDOR → mint access tokens for other accounts
-- [ ]  Nested-object BOLA (`/orders/{id}/items/{item_id}` checks order, not item)
-- [ ]  API versioning IDOR (v1 live/unprotected, v2 fixed)
-- [ ]  Mass assignment + IDOR (extra `owner_id`/`user_id` field reassigns ownership)
-- [ ]  HTTP verb tampering + IDOR (GET checked, PUT/PATCH/DELETE not)
-- [ ]  TOCTOU on ownership transfer (race a claim/transfer endpoint)
-- [ ]  Race condition + IDOR on invite/redeem flows (double redemption)
-- [ ]  Race condition on rate-limited ID enumeration
-- [ ]  IDOR on impersonation/support tooling → become anyone incl. admin
-- [ ]  IDOR on session/device management (view/revoke others’ sessions)
-- [ ]  IDOR on MFA enrollment/reset endpoints → chained ATO
+Work progressively: practice each path on its own before attempting a chain, revisit completed labs until the method is repeatable, and keep notes on the question, evidence, result, and lesson for each attempt. For every lab, use the same loop:
 
-**Edge-case patterns to check on every target**
+1. Read the lab brief and identify the intended boundary: identity, role, object, tenant, token, or origin.
+2. Map the relevant requests and record the expected behavior before changing anything.
+3. Form one testable hypothesis and vary one input or request property at a time.
+4. Compare the observed response with the expected behavior; save only the minimum evidence needed to explain the result.
+5. Use the lab’s solution or hints after a genuine attempt, then reset and reproduce the result without them.
+6. Write down the root cause, the check that would prevent it, and what evidence would distinguish it from a similar issue.
 
-- [ ]  Multi-step workflow: call finalize/approve directly, skip earlier steps
-- [ ]  Bulk endpoint: ownership checked once vs. per-item in the loop
-- [ ]  Nested resource permission inheritance gaps
-- [ ]  Impersonation/support-login sessions not scoping down
-- [ ]  Second-order authz (low-trust input reappearing unverified in high-trust context)
-- [ ]  Type-coercion bypass (negative IDs, arrays vs scalars, null vs missing, string-vs-int)
+After standalone practice, do chain drills only between the selected paths—for example, information disclosure that helps identify an access-control boundary, authentication or JWT behavior combined with BAC, API testing that checks BAC consistently across endpoints, or CORS behavior involving authenticated responses. Keep each chain small, explain the contribution of each step, and repeat it from a clean reset.
 
-**Business logic + race (your catalog’s #3 priority)**
-
-- [ ]  Price/quantity manipulation, negative values, coupon stacking
-- [ ]  Single-packet/multi-threaded TOCTOU on check-then-act (coupon, balance transfer, password reset)
+This plan does not expand the lab into unchecked paths or unrelated vulnerability classes. Business Logic, Race Conditions, and OAuth are deferred, as are other topics outside the six selected paths. Use the lab’s synthetic seeded accounts and data only in an isolated local machine or VM; use PortSwigger’s own authorized lab environment for its exercises. Never expose this intentionally vulnerable application, use real credentials or data, or test systems without explicit authorization.
