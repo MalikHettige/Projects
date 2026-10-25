@@ -16,7 +16,7 @@ Labs 2 and 3 (infra/SSRF-focused, OAuth-platform-focused) are scoped but not yet
 
 ## Concept primers
 
-Small, single-file, single-vulnerability demos — useful for a quick 10-minute "see the mechanism once" pass on a topic before or after a PortSwigger learning path. These are **not** chainable and are not counted as real lab reps. Each uses only Node.js built-ins, demonstrates one flaw with a vulnerable/secure toggle (`LAB_MODE=secure`), and has its own test suite. They are local-only synthetic simulations — several never make real network calls, parse real HTTP traffic, or use an external cache — so no finding or bounty outcome is implied.
+Small, single-vulnerability demos — useful for a quick "see the mechanism once" pass on a topic before or after a PortSwigger learning path. These are **not** chainable and are not counted as real lab reps. Each has its own setup instructions and test suite. Some are bounded simulations and do not make real network calls, parse real HTTP traffic, or use an external cache; check each lab's README for its behavior and dependencies.
 
 | Primer | Topic | Start here |
 |---|---|---|
@@ -28,6 +28,8 @@ Small, single-file, single-vulnerability demos — useful for a quick 10-minute 
 | [HTTP Request Smuggling](_concept-primers/request-smuggling-lab/README.md) | Front-end/back-end HTTP framing disagreement | `cd _concept-primers/request-smuggling-lab` |
 | [Insecure Deserialization](_concept-primers/deserialization-lab/README.md) | Trust boundaries around serialized JSON data | `cd _concept-primers/deserialization-lab` |
 | [Web Cache Poisoning](_concept-primers/cache-poisoning-lab/README.md) | Cache-key and response-input mismatches | `cd _concept-primers/cache-poisoning-lab` |
+| [Blind Command Injection (Simulation)](_concept-primers/blind-command-injection-lab/README.md) | Asynchronous feedback handling and simulated DNS interactions | `cd _concept-primers/blind-command-injection-lab` |
+
 ## What am I hunting here exactly?
 My aim is to become fluent in hunting critical chains and bugs. Need to do these enough times for me to feel like muscle memory. I start hunting right after I turned 18 on January 13 2027.
 
