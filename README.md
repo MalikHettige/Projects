@@ -4,6 +4,11 @@ A collection of personal security projects built to improve offensive security, 
 
 ## Current Projects
 
+
+> **Intentionally vulnerable code.** The applications in this repository are deliberately insecure, built so I can practice spotting missing authorization checks and other application security flaws. The security alerts and open pull requests you see on this repo come from that code and are expected. Do not deploy any of it.
+>
+> Related: [wazuh-detection-lab](https://github.com/MalikHettige/wazuh-detection-lab) is my defensive side, where I detect and investigate attacks like these in a Wazuh SIEM lab.
+
 ## AI Security Assistant
 
 A personal AI assistant designed to help with:
